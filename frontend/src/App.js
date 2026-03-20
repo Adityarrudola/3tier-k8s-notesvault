@@ -8,7 +8,7 @@ function App() {
 
   const fetchNotes = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/notes');
+      const res = await axios.get('api/notes');
       setNotes(res.data);
     } catch (err) { console.error(err); }
   };

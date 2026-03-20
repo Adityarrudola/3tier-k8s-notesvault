@@ -6,21 +6,19 @@ const noteRoutes = require('./routes/noteRoutes');
 
 const app = express();
 
-// CORS
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+// CORS (allow all for now, ingress will handle later)
+app.use(cors());
 
 app.use(express.json());
 
 // Routes
 app.use('/api/notes', noteRoutes);
 
-// MongoDB (rename DB optional but cleaner)
-mongoose.connect('mongodb://127.0.0.1:27017/notesapp')
+// MongoDB (from env)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
 // Server
-app.listen(5001, () => console.log('Server running on port 5001'));
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

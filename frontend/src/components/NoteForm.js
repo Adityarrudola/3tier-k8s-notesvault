@@ -8,7 +8,7 @@ function NoteForm({ fetchNotes }) {
     e.preventDefault();
     if (!form.title || !form.content) return;
     try {
-      await axios.post('http://localhost:5001/api/notes', form);
+      await axios.post('/api/notes'); 
       fetchNotes();
       setForm({ title: '', content: '' });
     } catch (err) { console.error(err); }
