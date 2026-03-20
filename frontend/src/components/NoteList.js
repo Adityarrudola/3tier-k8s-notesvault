@@ -3,8 +3,10 @@ import axios from 'axios';
 
 function NoteList({ notes, fetchNotes }) {
   const deleteNote = async (id) => {
-    await axios.delete(`/api/notes/${id}`);
-    fetchNotes();
+    try {
+      await axios.delete(`http://localhost:5001/api/notes/${id}`);
+      fetchNotes();
+    } catch (err) { console.error(err); }
   };
 
   const cardStyle = {
@@ -15,7 +17,6 @@ function NoteList({ notes, fetchNotes }) {
     display: 'flex',
     flexDirection: 'column',
     transition: 'all 0.3s ease',
-    cursor: 'default'
   };
 
   return (
@@ -26,12 +27,10 @@ function NoteList({ notes, fetchNotes }) {
           style={cardStyle}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = '#10b981';
-            e.currentTarget.style.boxShadow = '0 12px 20px rgba(0,0,0,0.04)';
             e.currentTarget.style.transform = 'translateY(-4px)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.borderColor = '#e2e8f0';
-            e.currentTarget.style.boxShadow = 'none';
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
@@ -41,19 +40,22 @@ function NoteList({ notes, fetchNotes }) {
             </span>
             <button 
               onClick={() => deleteNote(note._id)}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#cbd5e1', fontSize: '18px', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => e.target.style.color = '#ef4444'}
-              onMouseLeave={(e) => e.target.style.color = '#cbd5e1'}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#cbd5e1', fontSize: '18px' }}
             >
               ✕
             </button>
           </div>
           
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '20px', fontWeight: '700', color: '#1a202c' }}>{note.title}</h3>
-          <p style={{ color: '#4a5568', fontSize: '15px', lineHeight: '1.7', margin: 0, flex: 1 }}>{note.content}</p>
+          {/* CHECK: Ensure these match your Backend Model fields */}
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '20px', fontWeight: '700', color: '#1a202c' }}>
+            {note.title || "Untitled Note"}
+          </h3>
+          <p style={{ color: '#4a5568', fontSize: '15px', lineHeight: '1.7', margin: 0, flex: 1 }}>
+            {note.content || "Content missing - check backend field name"}
+          </p>
           
-          <div style={{ marginTop: '24px', borderTop: '1px solid #f7fafc', paddingTop: '16px', fontSize: '12px', color: '#a0aec0', fontWeight: '500' }}>
-            Created on {new Date().toLocaleDateString()}
+          <div style={{ marginTop: '24px', borderTop: '1px solid #f7fafc', paddingTop: '16px', fontSize: '12px', color: '#a0aec0' }}>
+            Created on {new Date(note.createdAt || Date.now()).toLocaleDateString()}
           </div>
         </div>
       ))}
