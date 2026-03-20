@@ -10,7 +10,7 @@ This project follows a typical microservices-based architecture deployed on Kube
 
 ## HomePage
 
-<img width="1456" height="748" alt="Screenshot 2026-03-20 at 5 08 11 PM" src="https://github.com/user-attachments/assets/5caf9ab3-a460-4d98-84c9-7d3e824b41bd" />
+<img width="1456" height="748" alt="Screenshot 2026-03-20 at 5 08 11 PM" src="https://github.com/user-attachments/assets/5caf9ab3-a460-4d98-84c9-7d3e824b41bd" />
 
 ---
 
@@ -63,11 +63,11 @@ MongoDB (Persistent Storage)
 
 ## Tech Stack
 
-Frontend: React, Axios, Nginx
-Backend: Node.js, Express
-Database: MongoDB
-DevOps: Docker, Kubernetes (Kind)
-Networking: NGINX Ingress Controller
+Frontend: React, Axios, Nginx  
+Backend: Node.js, Express  
+Database: MongoDB  
+DevOps: Docker, Kubernetes (Kind)  
+Networking: NGINX Ingress Controller  
 
 ---
 
@@ -121,33 +121,55 @@ Networking: NGINX Ingress Controller
 
 ### 1. Build Docker Images
 
-docker build -t notes-frontend:latest ./frontend
-docker build -t notes-backend:latest ./backend
+docker build -t notes-frontend:latest ./frontend  
+docker build -t notes-backend:latest ./backend  
 
 ---
 
 ### 2. Load Images into Kind
 
-kind load docker-image notes-frontend:latest --name notesvault
-kind load docker-image notes-backend:latest --name notesvault
+kind load docker-image notes-frontend:latest --name notesvault  
+kind load docker-image notes-backend:latest --name notesvault  
 
 ---
 
 ### 3. Deploy to Kubernetes
 
-kubectl apply -f k8s/mongo
-kubectl apply -f k8s/backend
-kubectl apply -f k8s/frontend
-kubectl apply -f k8s/ingress
+kubectl apply -f k8s/mongo  
+kubectl apply -f k8s/backend  
+kubectl apply -f k8s/frontend  
+kubectl apply -f k8s/ingress  
 
 ---
 
-### 4. Access Application
+### 4. Verify Deployment
 
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+kubectl get all
 
-Open:
-http://localhost:8080
+Expected output should include:
+- Pods (frontend, backend, mongo)
+- Services (ClusterIP)
+- Deployments
+- ReplicaSets
+
+Optional checks:
+
+kubectl get pods  
+kubectl get svc  
+kubectl get deployments  
+
+Kubernetes Resource Output
+
+<img width="829" height="420" alt="Screenshot 2026-03-20 at 5 51 54 PM" src="https://github.com/user-attachments/assets/b113e45b-bc7c-477e-921e-b537940cc679" />
+
+---
+
+### 5. Access Application
+
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80  
+
+Open:  
+http://localhost:8080  
 
 ---
 
@@ -155,43 +177,43 @@ http://localhost:8080
 
 Backend uses environment variables via ConfigMap:
 
-MONGO_URI = mongodb://mongo-service:27017/notesapp
+MONGO_URI = mongodb://mongo-service:27017/notesapp  
 
 ---
 
 ## Database Seeding
 
-- Runs automatically on backend startup
-- Inserts Kubernetes concepts if database is empty
-- Prevents duplicate data using document count check
+- Runs automatically on backend startup  
+- Inserts Kubernetes concepts if database is empty  
+- Prevents duplicate data using document count check  
 
 ---
 
 ## Kubernetes Concepts Demonstrated
 
-- Pods
-- Deployments
-- Services (ClusterIP)
-- Ingress
-- ConfigMaps
-- Persistent Volumes and Claims
-- MongoDB stateful storage
+- Pods  
+- Deployments  
+- Services (ClusterIP)  
+- Ingress  
+- ConfigMaps  
+- Persistent Volumes and Claims  
+- MongoDB stateful storage  
 
 ---
 
 ## Future Improvements
 
-- Authentication (JWT / OAuth)
-- Notes editing functionality
-- CI/CD pipeline (GitHub Actions / Argo CD)
-- Helm chart packaging
-- Monitoring (Prometheus + Grafana)
-- Logging (ELK / Loki)
+- Authentication (JWT / OAuth)  
+- Notes editing functionality  
+- CI/CD pipeline (GitHub Actions / Argo CD)  
+- Helm chart packaging  
+- Monitoring (Prometheus + Grafana)  
+- Logging (ELK / Loki)  
 
 ---
 
 ## Author
 
-Aditya Rudola
+Aditya Rudola  
 
 This project is built for learning and demonstrating real-world Kubernetes and DevOps workflows.
